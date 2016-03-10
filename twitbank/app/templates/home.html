@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {% if user.is_authenticated %}
+    <p>Start tweeting!</p>
+  {% else %}
+  	<p>Sign in with Twitter below</p>
+
+	  <p>We'll find people you follow who use Bernie Sanders hashtags</p>
+
+	  <p>Tweet at them or send them a direct message to be sure they know how to vote for Bernie</p>
+  {% endif %}
+{% endblock %}
