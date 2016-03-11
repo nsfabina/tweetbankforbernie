@@ -18,7 +18,7 @@ _TWITTER = Twython(_API_KEY, access_token=_ACCESS_TOKEN)
 # Follower query
 # TODO: NEEDS FOLLOWER FLAG
 _QUERY_FOLLOWERS = '%23SandersForPresident%20OR%20%23Sanders2016%20OR%20' + \
-    '%23FeelTheBern&include%3Aretweets&src=typd'
+    '%23FeelTheBern&src=typd'
 _RECENT_TWEET_COUNT = 20
 
 # Global variables for oembed urls
