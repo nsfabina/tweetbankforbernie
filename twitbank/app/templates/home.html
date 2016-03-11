@@ -6,20 +6,36 @@
 <div class="container">
  	<div class="row">
   	<div class="eight columns offset-by-two">
-  		<p>Follow me to get website update information:  TwitBank4Bernie. I'll let you know when we have state-specific action items or better search tools.</p>
-  		<p>Start tweeting!</p>
+  		<p><b>These are the most-recent tweets from your followers with pro-Bernie hashtags.</b></p>
   	</div>
   </div>
 
+  <div class="row center">
+    <div class="eight columns offset-by-two">
+      <p>Ask your followers for help TwitBanking:  <a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
+    </div>
+  </div>
+
  	{% for tweets in follower_tweets %}
- 		<div class="row">
- 		  <div class="eight columns offset-by-two">
+ 		<div class="row center">
+ 			{% if forloop.counter|divisibleby:2 %}
+ 				<div class="eight columns offset-by-two" style="background-color: rgb(204, 204, 204);">
+ 			{% else %}
+ 				<div class="eight columns offset-by-two" style="background-color: rgb(153, 204, 255);">
+ 			{% endif %}
+ 				<br>
 				{{ tweets.0 |safe }}
-	  		<p>Give them voting information:  <a class="twitter-share-button" href="{{ tweets.1 }}">{{ Tweet }}</a></p>
-	  		<p>Ask them to help TwitBank:  <a class="twitter-share-button" href="{{ tweets.2 }}">{{ Tweet }}</a></p>
+	  		<p>Share voting information with this follower:  <a class="twitter-share-button" href="{{ tweets.1 }}">{{ Tweet }}</a></p>
 	  	</div>
 	  </div>
   {% endfor %}
+
+  <div class="row center">
+    <div class="eight columns offset-by-two">
+    	<br>
+      <p>Done already? Visit us again later, and ask your followers for help TwitBanking:  <a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
+    </div>
+  </div>
 
 		<script>window.twttr = (function(d, s, id) {
 		  var js, fjs = d.getElementsByTagName(s)[0],

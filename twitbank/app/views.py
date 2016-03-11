@@ -33,9 +33,10 @@ _TWEET_VOTE = 'https://twitter.com/intent/tweet?text=@{username} ' + \
         text=_VOTE_TEXT, url=_VOTE_URL)
 
 # Global variables for banking tweets
-_TWEET_BANK_TEXT = 'Take one minute to tweet voting info to your followers:'
+_TWEET_BANK_TEXT = 'Take one minute to help tweet voting info to your followers, ' + \
+    'via @TwitBank4Bernie:'
 _TWEET_BANK_URL = 'http://twitbank4bernie.com'
-_TWEET_BANK = 'https://twitter.com/intent/tweet?text=@{username} ' + \
+_TWEET_BANK = 'https://twitter.com/intent/tweet?text=' + \
     '{text}&url={url}&hashtags=SandersForPresident,TwitBank4Bernie'.format(
         text=_TWEET_BANK_TEXT, url=_TWEET_BANK_URL)
 
@@ -45,7 +46,6 @@ class HomeView(View):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() is False: 
             return render(request, 'home.html')
-        return render(request, 'home.html')
         # Get most recent Sanders tweets
         recent_tweets = _get_most_recent_sanders_tweets()
         # Get context
@@ -54,9 +54,8 @@ class HomeView(View):
             tweet_embed = json.loads(requests.get(_OEMBED_URL.format(
                 id=status_id)).text)['html']
             tweet_vote = _TWEET_VOTE.format(username=username)
-            tweet_bank = _TWEET_BANK.format(username=username)
-            follower_tweets.append([tweet_embed, tweet_vote, tweet_bank])
-        context = {'follower_tweets': follower_tweets}
+            follower_tweets.append([tweet_embed, tweet_vote])
+        context = {'follower_tweets': follower_tweets, 'tweet_help': _TWEET_BANK}
         return render(request, 'home.html', context=context)
 
 
