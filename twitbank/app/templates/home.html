@@ -2,12 +2,17 @@
 
 {% block title %}
   {% if user.is_authenticated %}
-    <p>Start tweeting!</p>
+  	<p>Start tweeting!</p>
+
+  	<a id="logout" href="/accounts/logout" class="btn btn-success">Logout</a>
   {% else %}
-  	<p>Sign in with Twitter below</p>
+    <p>Sign in with Twitter</p>
 
 	  <p>We'll find people you follow who use Bernie Sanders hashtags</p>
 
-	  <p>Tweet at them or send them a direct message to be sure they know how to vote for Bernie</p>
+	  <p>Tweet at them or send them a direct message to be sure they know how to vote for Bernie
+  	
+  	{% load socialaccount %}
+  	<p><a href="{% provider_login_url "twitter" %}">Twitter</a></p>
   {% endif %}
 {% endblock %}
