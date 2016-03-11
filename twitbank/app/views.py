@@ -45,6 +45,7 @@ class HomeView(View):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() is False: 
             return render(request, 'home.html')
+        return render(request, 'home.html')
         # Get most recent Sanders tweets
         recent_tweets = _get_most_recent_sanders_tweets()
         # Get context

@@ -1,18 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  {% if user.is_authenticated %}
-  	<p>Follow me to get website update information:  TwitBank4Bernie. I'll let you know when we have state-specific action items or better search tools.</p>
+{% if user.is_authenticated %}
 
-  	<p>Start tweeting!</p>
+<div class="container">
+ 	<div class="row">
+  	<div class="eight columns offset-by-two">
+  		<p>Follow me to get website update information:  TwitBank4Bernie. I'll let you know when we have state-specific action items or better search tools.</p>
+  		<p>Start tweeting!</p>
+  	</div>
+  </div>
 
-  	{% for tweets in follower_tweets %}
-	  	{{ tweets.0 |safe }}
-	  	<p>Give them voting information:  <a class="twitter-share-button" href="{{ tweets.1 }}">{{ Tweet }}</a></p>
-	  	<p>Ask them to help TwitBank:  <a class="twitter-share-button" href="{{ tweets.2 }}">{{ Tweet }}</a></p>
-  	{% endfor %}
-   
-  	<p><a id="logout" href="/accounts/logout" class="btn btn-success">Logout</a></p>
+ 	{% for tweets in follower_tweets %}
+ 		<div class="row">
+ 		  <div class="eight columns offset-by-two">
+				{{ tweets.0 |safe }}
+	  		<p>Give them voting information:  <a class="twitter-share-button" href="{{ tweets.1 }}">{{ Tweet }}</a></p>
+	  		<p>Ask them to help TwitBank:  <a class="twitter-share-button" href="{{ tweets.2 }}">{{ Tweet }}</a></p>
+	  	</div>
+	  </div>
+  {% endfor %}
 
 		<script>window.twttr = (function(d, s, id) {
 		  var js, fjs = d.getElementsByTagName(s)[0],
@@ -31,16 +38,31 @@
 		  return t;
 		}(document, "script", "twitter-wjs"));</script>
 
-  {% else %}
-    <p>Sign in with Twitter</p>
+{% else %}
 
-	  <p>We'll find people you follow who use Bernie Sanders hashtags</p>
+<div class="container">
+  <div class="row">
+    <div class="eight columns offset-by-two center">
+    	<p><b>Remind your Twitter followers of important voting dates and rules.</b></p>
+    </div>
+    <div class="six columns offset-by-three">
+    	<ul>
+    	  <li>Step 1:  Sign in with your Twitter account.</li>
+    	  <li>Step 2:  See which of your followers are likely Bernie supporters.</li>
+    	  <li>Step 3:  Send pre-generated tweets only to selected followers.</li>
+    	</ul>
+		</div>
+	</div>
+	<div class="eight columns offset-by-two center">
+    	<p><b>Log in and take a look around!</b></p>
+    </div>
+	<div class="row center">
+	  <div class="four columns offset-by-four">
+	    {% load socialaccount %}
+  		<p><a href="{% provider_login_url "twitter" %}" class="button button-primary">Log in</a></p>
+  	</div>
+  </div>
 
-	  <p>Tweet at them or send them a direct message to be sure they know how to vote for Bernie
-  	
-  	{% load socialaccount %}
-  	<p><a href="{% provider_login_url "twitter" %}">Twitter</a></p>
-  {% endif %}
-
+{% endif %}
 
 {% endblock %}

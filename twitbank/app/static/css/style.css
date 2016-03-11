@@ -1,0 +1,30 @@
+/* Imports */
+@import "normalize.css";
+@import "skeleton.css";
+
+/* Header */
+#navbar {
+	margin-top: 3rem;
+	margin-bottom: 5rem;
+}
+.title {
+	text-align: center;
+	font-family: Montserrat;
+	color: #147FD7;
+}
+
+/* Formatting */
+.center {
+    text-align: center;
+}
+ul {
+	list-style: none
+}
+
+/* Fonts */
+@font-face {
+    font-family: 'Montserrat';
+    src: url('static/fonts/Montserrat-Bold.otf');
+    font-weight: bold;
+    font-style: bold;
+}
