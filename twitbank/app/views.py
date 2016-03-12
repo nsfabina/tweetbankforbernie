@@ -71,8 +71,8 @@ class HomeView(View):
                 id=status_id)).text)['html']
             tweet_vote = _TWEET_VOTE.format(username=username)
             tweet_context.append([tweet_embed, tweet_vote])
-        context = {'tweet_context': tweet_context, 'tweet_help': _TWEET_BANK,
-                   'tweet_activism': _TWEET_ACTIVISM}
+        context = {'user': username, 'tweet_context': tweet_context,
+                   'tweet_help': _TWEET_BANK, 'tweet_activism': _TWEET_ACTIVISM}
         return render(request, 'home.html', context=context)
 
 
