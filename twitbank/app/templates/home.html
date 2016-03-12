@@ -85,7 +85,7 @@
 	<div class="row" style="margin-bottom: 5rem">
   	<div class="four columns offset-by-four">
   		{% load socialaccount %}
-  		<a href="{% provider_login_url "twitter" %}" class="button button-primary">Log in</a>
+  		<a href="{% provider_login_url "twitter" %}" class="button button-primary">Log in with Twitter</a>
   	</div>
   </div>
 
@@ -110,5 +110,11 @@
   </div>
 
 {% endif %}
+
+  <div class="row" style="margin-top: 3rem">
+    <div class="four columns offset-by-four">
+      <p><a href="faqs">Frequently asked questions</a></p>
+    </div>
+  </div> 
 
 {% endblock %}
