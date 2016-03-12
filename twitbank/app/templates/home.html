@@ -9,39 +9,49 @@
   	</div>
   </div>
 
- 	<div class="row no-center">
-  	<div class="eight columns offset-by-two">
-  		<p><b>These are the most-recent tweets from your followers with pro-Bernie hashtags.</b></p>
-  	</div>
-  </div>
-
-  <div class="row">
+  <div class="row" style="margin-bottom: 3rem">
     <div class="eight columns offset-by-two">
       <p>Ask your followers for help TwitBanking:  <a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
     </div>
   </div>
 
- 	{% for tweets in follower_tweets %}
- 		<div class="row">
- 			{% if forloop.counter|divisibleby:2 %}
- 				<div class="eight columns offset-by-two" style="background-color: rgb(225, 225, 225);">
- 			{% else %}
- 				<div class="eight columns offset-by-two" style="background-color: rgb(204, 225, 255);">
- 			{% endif %}
- 				<br>
-				{{ tweets.0 |safe }}
-	  		<p>Share voting information with this follower:  <a class="twitter-share-button" href="{{ tweets.1 }}"></a></p>
+  {% if tweet_context %}
+	 	<div class="row no-center">
+	  	<div class="eight columns offset-by-two">
+	  		<p><b>These are the {{ tweet_context|length }} most-recent tweets from your timeline with pro-Bernie hashtags.</b></p>
 	  	</div>
 	  </div>
-  {% endfor %}
 
-  <div class="row">
-    <div class="eight columns offset-by-two">
-    	<br>
-      <p>Done already?</p>
-      <p>Visit us again later, and ask your followers to help TwitBank for Bernie:  <a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
-    </div>
-  </div>
+	 	{% for tweets in tweet_context %}
+	 		<div class="row">
+	 			{% if forloop.counter|divisibleby:2 %}
+	 				<div class="eight columns offset-by-two" style="background-color: rgb(225, 225, 225);">
+	 			{% else %}
+	 				<div class="eight columns offset-by-two" style="background-color: rgb(204, 225, 255);">
+	 			{% endif %}
+	 				<br>
+					{{ tweets.0 |safe }}
+		  		<p>Share voting information with this follower:  <a class="twitter-share-button" href="{{ tweets.1 }}"></a></p>
+		  	</div>
+		  </div>
+		{% endfor %}
+		  
+	  <div class="row">
+	    <div class="eight columns offset-by-two">
+	    	<br>
+	      <p>Done already?</p>
+	      <p>Visit us again later, and ask your followers to help TwitBank for Bernie:  <a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
+	    </div>
+	  </div>
+	{% else %}
+		 <div class="row no-center">
+	  	<div class="eight columns offset-by-two">
+	  		<p><b>There are no tweets on your timeline with pro-Bernie hashtags.</b></p>
+
+	 			<p>Check back again in the future.</p>
+	  	</div>
+	  </div>
+	{% endif %}
 
 	<script>window.twttr = (function(d, s, id) {
 	  var js, fjs = d.getElementsByTagName(s)[0],
