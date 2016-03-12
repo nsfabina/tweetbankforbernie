@@ -35,12 +35,20 @@ _TWEET_VOTE = 'https://twitter.com/intent/tweet?text=@{username} ' + \
         text=_VOTE_TEXT, url=_VOTE_URL)
 
 # Global variables for banking tweets
-_TWEET_BANK_TEXT = 'Take one minute to help tweet voting info to your followers, ' + \
+_TWEET_BANK_TEXT = 'Take one minute to help tweet voting info to your followers ' + \
     'via @TweetBankForBern:'
 _TWEET_BANK_URL = 'http://tweetbankforbernie.com'
 _TWEET_BANK = 'https://twitter.com/intent/tweet?text=' + \
     '{text}&url={url}&hashtags=SandersForPresident,TweetBank4Bern&size=large'.format(
         text=_TWEET_BANK_TEXT, url=_TWEET_BANK_URL)
+
+# Global variables for activism tweets
+_TWEET_ACTIVISM_TEXT = 'Take action! Learn how you can help get out the vote: '
+_TWEET_ACTIVISM_URL = 'http://http://voteforbernie.org/GOTV/'
+_TWEET_ACTIVISM = 'https://twitter.com/intent/tweet?text=' + \
+    '{text}&url={url}&hashtags=SandersForPresident,TweetBank4Bern&size=large'.format(
+        text=_TWEET_ACTIVISM_TEXT, url=_TWEET_ACTIVISM_URL)
+
 
 
 class HomeView(View):
@@ -63,7 +71,8 @@ class HomeView(View):
                 id=status_id)).text)['html']
             tweet_vote = _TWEET_VOTE.format(username=username)
             tweet_context.append([tweet_embed, tweet_vote])
-        context = {'tweet_context': tweet_context, 'tweet_help': _TWEET_BANK}
+        context = {'tweet_context': tweet_context, 'tweet_help': _TWEET_BANK,
+                   'tweet_activism': _TWEET_ACTIVISM}
         return render(request, 'home.html', context=context)
 
 
