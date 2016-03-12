@@ -31,7 +31,7 @@ _OEMBED_URL = 'https://api.twitter.com/1/statuses/oembed.json?id={id}&' + \
 _VOTE_TEXT = 'Remember to vote! Register on time! Dates and rules here:'
 _VOTE_URL = 'https://voteforbernie.org'
 _TWEET_VOTE = 'https://twitter.com/intent/tweet?text=@{username} ' + \
-    '{text}&url={url}&hashtags=SandersForPresident,TweetBankForBern&size=large'.format(
+    '{text}&url={url}&hashtags=SandersForPresident,TweetBank4Bern&size=large'.format(
         text=_VOTE_TEXT, url=_VOTE_URL)
 
 # Global variables for banking tweets
@@ -39,7 +39,7 @@ _TWEET_BANK_TEXT = 'Take one minute to help tweet voting info to your followers,
     'via @TweetBankForBern:'
 _TWEET_BANK_URL = 'http://tweetbankforbernie.com'
 _TWEET_BANK = 'https://twitter.com/intent/tweet?text=' + \
-    '{text}&url={url}&hashtags=SandersForPresident,TweetBankForBern&size=large'.format(
+    '{text}&url={url}&hashtags=SandersForPresident,TweetBank4Bern&size=large'.format(
         text=_TWEET_BANK_TEXT, url=_TWEET_BANK_URL)
 
 
