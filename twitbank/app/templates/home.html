@@ -3,76 +3,85 @@
 {% block content %}
 {% if user.is_authenticated %}
 
-<div class="container">
- 	<div class="row">
+	<div class="row" style="margin-bottom: 5rem">
+  	<div class="four columns offset-by-four">
+  		  <a id="logout" href="/accounts/logout" class="button btn btn-success">Logout</a>
+  	</div>
+  </div>
+
+ 	<div class="row no-center">
   	<div class="eight columns offset-by-two">
   		<p><b>These are the most-recent tweets from your followers with pro-Bernie hashtags.</b></p>
   	</div>
   </div>
 
-  <div class="row center">
+  <div class="row">
     <div class="eight columns offset-by-two">
       <p>Ask your followers for help TwitBanking:  <a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
     </div>
   </div>
 
  	{% for tweets in follower_tweets %}
- 		<div class="row center">
+ 		<div class="row">
  			{% if forloop.counter|divisibleby:2 %}
- 				<div class="eight columns offset-by-two" style="background-color: rgb(204, 204, 204);">
+ 				<div class="eight columns offset-by-two" style="background-color: rgb(225, 225, 225);">
  			{% else %}
- 				<div class="eight columns offset-by-two" style="background-color: rgb(153, 204, 255);">
+ 				<div class="eight columns offset-by-two" style="background-color: rgb(204, 225, 255);">
  			{% endif %}
  				<br>
 				{{ tweets.0 |safe }}
-	  		<p>Share voting information with this follower:  <a class="twitter-share-button" href="{{ tweets.1 }}">{{ Tweet }}</a></p>
+	  		<p>Share voting information with this follower:  <a class="twitter-share-button" href="{{ tweets.1 }}"></a></p>
 	  	</div>
 	  </div>
   {% endfor %}
 
-  <div class="row center">
+  <div class="row">
     <div class="eight columns offset-by-two">
     	<br>
-      <p>Done already? Visit us again later, and ask your followers for help TwitBanking:  <a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
+      <p>Done already? Visit us again later, and ask your followers to help TwitBank for Bernie:  <a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
     </div>
   </div>
 
-		<script>window.twttr = (function(d, s, id) {
-		  var js, fjs = d.getElementsByTagName(s)[0],
-		    t = window.twttr || {};
-		  if (d.getElementById(id)) return t;
-		  js = d.createElement(s);
-		  js.id = id;
-		  js.src = "https://platform.twitter.com/widgets.js";
-		  fjs.parentNode.insertBefore(js, fjs);
-		 
-		  t._e = [];
-		  t.ready = function(f) {
-		    t._e.push(f);
-		  };
-		 
-		  return t;
-		}(document, "script", "twitter-wjs"));</script>
+	<script>window.twttr = (function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0],
+	    t = window.twttr || {};
+	  if (d.getElementById(id)) return t;
+	  js = d.createElement(s);
+	  js.id = id;
+	  js.src = "https://platform.twitter.com/widgets.js";
+	  fjs.parentNode.insertBefore(js, fjs);
+	 
+	  t._e = [];
+	  t.ready = function(f) {
+	    t._e.push(f);
+	  };
+	 
+	  return t;
+	}(document, "script", "twitter-wjs"));</script>
 
 {% else %}
 
-<div class="container">
+	<div class="row" style="margin-bottom: 5rem">
+  	<div class="four columns offset-by-four">
+  		{% load socialaccount %}
+  		<a href="{% provider_login_url "twitter" %}" class="button button-primary">Log in</a>
+  	</div>
+  </div>
+
   <div class="row">
-    <div class="eight columns offset-by-two center">
+    <div class="eight columns offset-by-two">
     	<p><b>Remind your Twitter followers of important voting dates and rules.</b></p>
     </div>
-    <div class="six columns offset-by-three">
+    <div class="six columns offset-by-three no-center">
     	<ul>
     	  <li>Step 1:  Sign in with your Twitter account.</li>
     	  <li>Step 2:  See which of your followers are likely Bernie supporters.</li>
     	  <li>Step 3:  Send pre-generated tweets only to selected followers.</li>
     	</ul>
 		</div>
-	</div>
-	<div class="eight columns offset-by-two center">
+		<div class="eight columns offset-by-two">
     	<p><b>Log in and take a look around!</b></p>
     </div>
-	<div class="row center">
 	  <div class="four columns offset-by-four">
 	    {% load socialaccount %}
   		<p><a href="{% provider_login_url "twitter" %}" class="button button-primary">Log in</a></p>

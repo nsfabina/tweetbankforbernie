@@ -3,10 +3,6 @@
 @import "skeleton.css";
 
 /* Header */
-#navbar {
-	margin-top: 3rem;
-	margin-bottom: 5rem;
-}
 .title {
 	text-align: center;
 	font-family: Montserrat;
@@ -14,17 +10,29 @@
 }
 
 /* Formatting */
+.twitter-share-button {
+	margin-top: .5rem;
+}
 .center {
     text-align: center;
 }
+.no-center {
+    text-align: left;
+}
+.twitter-share-button { 
+	vertical-align: -10px !important;
+}
+a {
+	text-decoration: none;
+}
 ul {
-	list-style: none
+	list-style: none;
 }
 
 /* Fonts */
 @font-face {
     font-family: 'Montserrat';
-    src: url('static/fonts/Montserrat-Bold.otf');
+    src: url('/static/fonts/Montserrat-Bold.otf');
     font-weight: bold;
     font-style: bold;
 }

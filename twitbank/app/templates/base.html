@@ -13,35 +13,27 @@
 
 <body>
 
-<div id="navbar" class="container center">
+<div class="container center" style="margin-top: 3rem">
   <div class="row">
     <div class="four columns offset-by-four">
-    	<img src="static/images/logo.png" style="width:100%">
+    	<a href="/"><img src="/static/images/logo.png" style="width:100%"></a>
     </div>
    </div>
    <div class="row">
     <div class="six columns offset-by-three">
-  		<h1 class="title"><b>TwitBank for Bernie</b></h1>
-  	</div>
-  </div>
-  <div class="row">
-  	<div class="four columns offset-by-four">
-  		{% if user.is_authenticated %}
-  		  <a id="logout" href="/accounts/logout" class="button btn btn-success">Logout</a>
-  		{% else %}
-  			{% load socialaccount %}
-  			<a href="{% provider_login_url "twitter" %}" class="button button-primary">Log in</a>
-  		{% endif %}
+  		<a href="/"><h1 class="title"><b>TwitBank for Bernie</b></h1></a>
   	</div>
   </div>
 </div>
 
-{% block content %}{% endblock %}
+<div class="container center">
+  {% block content %}{% endblock %}
+</div>
 
 <div class="container center">
   <div class="row">
   	<div class="four columns offset-by-four">
-  		<a href="https://twitter.com/TwitBank4Bernie" class="twitter-follow-button" data-show-count="false">Follow @TwitBank4Bernie</a></p>
+  		<a href="https://twitter.com/TwitBank4Bernie" class="twitter-follow-button" data-size="large" data-show-count="false">Follow @TwitBank4Bernie</a></p>
   	</div>
   </div>
 </div>

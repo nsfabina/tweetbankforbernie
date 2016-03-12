@@ -17,8 +17,9 @@ _TWITTER = Twython(_API_KEY, access_token=_ACCESS_TOKEN)
 
 # Follower query
 # TODO: NEEDS FOLLOWER FLAG
-_QUERY_FOLLOWERS = '%23SandersForPresident%20OR%20%23Sanders2016%20OR%20' + \
-    '%23FeelTheBern&src=typd&result_type=recent'
+_QUERY_HASHTAGS = '#SandersForPresident OR #Sanders2016 OR #FeelTheBern'
+_QUERY_FILTERS = 'exclude:retweets exclude:replies'
+_QUERY_FOLLOWERS = _QUERY_HASHTAGS + ' ' + _QUERY_FILTERS
 _RECENT_TWEET_COUNT = 20
 
 # Global variables for oembed urls
@@ -29,7 +30,7 @@ _OEMBED_URL = 'https://api.twitter.com/1/statuses/oembed.json?id={id}&' + \
 _VOTE_TEXT = 'Remember to vote! Register on time! Dates and rules here:'
 _VOTE_URL = 'https://voteforbernie.org'
 _TWEET_VOTE = 'https://twitter.com/intent/tweet?text=@{username} ' + \
-    '{text}&url={url}&hashtags=SandersForPresident,TwitBank4Bernie'.format(
+    '{text}&url={url}&hashtags=SandersForPresident,TwitBank4Bernie&size=large'.format(
         text=_VOTE_TEXT, url=_VOTE_URL)
 
 # Global variables for banking tweets
@@ -37,7 +38,7 @@ _TWEET_BANK_TEXT = 'Take one minute to help tweet voting info to your followers,
     'via @TwitBank4Bernie:'
 _TWEET_BANK_URL = 'http://twitbank4bernie.com'
 _TWEET_BANK = 'https://twitter.com/intent/tweet?text=' + \
-    '{text}&url={url}&hashtags=SandersForPresident,TwitBank4Bernie'.format(
+    '{text}&url={url}&hashtags=SandersForPresident,TwitBank4Bernie&size=large'.format(
         text=_TWEET_BANK_TEXT, url=_TWEET_BANK_URL)
 
 
@@ -63,7 +64,9 @@ def _get_most_recent_sanders_tweets():
     """
     Get the most recent Sanders statuses from followers.
     """
-    statuses = _TWITTER.search(q=_QUERY_FOLLOWERS, count=_RECENT_TWEET_COUNT)['statuses']
+    statuses = _TWITTER.search(q=_QUERY_FOLLOWERS, count=_RECENT_TWEET_COUNT,
+                               result_type='recent', src='typd')
+    statuses = statuses['statuses']
     recent_tweets = {status['user']['screen_name']: status['id']
                      for status in reversed(statuses)}
     ordered_usernames = OrderedSet([status['user']['screen_name']
