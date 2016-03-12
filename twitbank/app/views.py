@@ -16,8 +16,11 @@ _API_SECRET = 'cToHwLmAlWOjOXtV3kt0L0Sgo6y5FJUaehzBAFQFJgYjWuvEBh'
 # Timeline parameters
 _TIMELINE_ARGS = {'count': 200, 'trim_user': False, 'exclude_replies': True,
                   'include_entities': True}
-_SANDERS_HASHTAGS = ['SandersForPresident', 'Sanders2016', 'FeelTheBern']#, 'DaylightSavingTime']
-_TWEET_LIMIT = 10
+_SANDERS_HASHTAGS = [
+    'Bernie2016', 'BernieForPresident', 'BernieOrBust', 'BernieSanders', 'Bernie'
+    'Sanders2016', 'SandersForPresident', 'FeelTheBern'
+    ]
+_TWEET_LIMIT = 20
 
 # Global variables for oembed urls
 _OEMBED_URL = 'https://api.twitter.com/1/statuses/oembed.json?id={id}&' + \
@@ -28,15 +31,15 @@ _OEMBED_URL = 'https://api.twitter.com/1/statuses/oembed.json?id={id}&' + \
 _VOTE_TEXT = 'Remember to vote! Register on time! Dates and rules here:'
 _VOTE_URL = 'https://voteforbernie.org'
 _TWEET_VOTE = 'https://twitter.com/intent/tweet?text=@{username} ' + \
-    '{text}&url={url}&hashtags=SandersForPresident,TwitBank4Bernie&size=large'.format(
+    '{text}&url={url}&hashtags=SandersForPresident,TweetBankForBern&size=large'.format(
         text=_VOTE_TEXT, url=_VOTE_URL)
 
 # Global variables for banking tweets
 _TWEET_BANK_TEXT = 'Take one minute to help tweet voting info to your followers, ' + \
-    'via @TwitBank4Bernie:'
-_TWEET_BANK_URL = 'http://twitbank4bernie.com'
+    'via @TweetBankForBern:'
+_TWEET_BANK_URL = 'http://tweetbankforbernie.com'
 _TWEET_BANK = 'https://twitter.com/intent/tweet?text=' + \
-    '{text}&url={url}&hashtags=SandersForPresident,TwitBank4Bernie&size=large'.format(
+    '{text}&url={url}&hashtags=SandersForPresident,TweetBankForBern&size=large'.format(
         text=_TWEET_BANK_TEXT, url=_TWEET_BANK_URL)
 
 

@@ -11,14 +11,18 @@
 
   <div class="row" style="margin-bottom: 3rem">
     <div class="eight columns offset-by-two">
-      <p>Ask your followers for help TwitBanking:  <a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
+      <p>Ask your followers for help TweetBanking:  <a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
     </div>
   </div>
 
   {% if tweet_context %}
 	 	<div class="row no-center">
 	  	<div class="eight columns offset-by-two">
-	  		<p><b>These are the {{ tweet_context|length }} most-recent tweets from your timeline with pro-Bernie hashtags.</b></p>
+	  		{% if tweet_context|length > 1 %}
+	  			<p><b>These are the {{ tweet_context|length }} most-recent tweets from your timeline with pro-Bernie hashtags.</b></p>
+	  		{% else %}
+	  			<p><b>This is the only most-recent tweet from your timeline with pro-Bernie hashtags.</b></p>
+	  		{% endif %}
 	  	</div>
 	  </div>
 
@@ -40,15 +44,15 @@
 	    <div class="eight columns offset-by-two">
 	    	<br>
 	      <p>Done already?</p>
-	      <p>Visit us again later, and ask your followers to help TwitBank for Bernie:  <a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
+	      <p>Visit us again later, and ask your followers to help TweetBank for Bernie:  <a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
 	    </div>
 	  </div>
 	{% else %}
 		 <div class="row no-center">
 	  	<div class="eight columns offset-by-two">
-	  		<p><b>There are no tweets on your timeline with pro-Bernie hashtags.</b></p>
+	  		<p><b>There are no recent tweets on your timeline with pro-Bernie hashtags.</b></p>
 
-	 			<p>Check back again in the future.</p>
+	 			<p>Check back in the future to find new tweets on your timeline or new TweetBanking features.</p>
 	  	</div>
 	  </div>
 	{% endif %}
