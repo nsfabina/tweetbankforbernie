@@ -3,32 +3,26 @@
 {% block content %}
 {% if user.is_authenticated %}
 
-	<div class="row no-center" style="margin-bottom: 3rem">
+	<div class="row" style="margin-bottom: 3rem">
     <div class="eight columns offset-by-two">
   		<p><b>Welcome!</b> You're logged in with <b>Twitter</b> as <b>{{ username }}</b>. <img src="/static/images/twitter.png" style="height: 3rem; vertical-align: -5px"></p>
   	</div>
   </div>
 
-  <div class="row" style="margin-bottom: 3rem">
-    <div class="eight columns offset-by-two">
-      <p>Share GOTV information with your followers:  <a class="twitter-share-button" href="{{ tweet_activism }}">{{ Tweet }}</a></p>
+  <div class="row" style="margin-bottom: 5rem">
+    <div class="four columns">
+      <p>Share <b>GOTV</b> info with your followers<br><a class="twitter-share-button" href="{{ tweet_activism }}">{{ Tweet }}</a></p>
     </div>
-  </div>
-
-  <div class="row" style="margin-bottom: 3rem">
-    <div class="eight columns offset-by-two">
-      <p>Ask your followers for help TweetBanking:  <a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
+    <div class="four columns">
+      <p>Ask your followers for help <b>TweetBanking</b><br><a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
     </div>
-  </div>
-
-    <div class="row" style="margin-bottom: 3rem">
-    <div class="eight columns offset-by-two">
-      <p>Ask your followers for help FaceBanking:  <a class="twitter-share-button" href="{{ tweet_face }}">{{ Tweet }}</a></p>
+    <div class="four columns">
+      <p>Ask your followers for help <b>FaceBanking</b><br><a class="twitter-share-button" href="{{ tweet_face }}">{{ Tweet }}</a></p>
     </div>
   </div>
 
   {% if tweet_context %}
-	 	<div class="row no-center">
+	 	<div class="row">
 	  	<div class="eight columns offset-by-two">
 	  		{% if tweet_context|length > 1 %}
 	  			<p><b>These are the {{ tweet_context|length }} most-recent tweets from your timeline with pro-Bernie hashtags.</b></p>
@@ -61,7 +55,7 @@
 	    </div>
 	  </div>
 	{% else %}
-		 <div class="row no-center">
+		 <div class="row">
 	  	<div class="eight columns offset-by-two">
 	  		<p><b>Currently, there are no recent tweets on your timeline with pro-Bernie hashtags.</b></p>
 
@@ -101,7 +95,19 @@
 
 {% endif %}
 
-<div class="row" style="margin-top: 3rem">
+<div class="row" style="margin-top: 5rem; margin-bottom: 3rem">
+  <div class="four columns">
+    <p><a href="http://voteforbernie.org/GOTV/">Help get out the vote in other ways</a></p>
+  </div>
+  <div class="four columns">
+    <p><a href="http://berniefriendfinder.com">Contact Facebook friends about voting</a></p>
+  </div>
+  <div class="four columns">
+    <p><a href="https://berniesanders.com">Donate to Bernie at his official site</a></p>
+  </div>
+</div>
+
+<div class="row" style="margin-bottom: 3rem">
   <div class="four columns offset-by-four">
     <p><a href="faqs">Frequently asked questions</a></p>
   </div>
