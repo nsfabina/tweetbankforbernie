@@ -24,7 +24,7 @@ _TWEET_LIMIT = 20
 
 # Global variables for activism tweets
 _TWEET_ACTIVISM_TEXT = 'Take action! Learn how you can help get out the vote: '
-_TWEET_ACTIVISM_URL = 'http://http://voteforbernie.org/GOTV/'
+_TWEET_ACTIVISM_URL = 'http://voteforbernie.org/GOTV/'
 _TWEET_ACTIVISM = 'https://twitter.com/intent/tweet?text=' + \
     '{text}&url={url}&hashtags=SandersForPresident,TweetBank4Bern&size=large'.format(
         text=_TWEET_ACTIVISM_TEXT, url=_TWEET_ACTIVISM_URL)
@@ -65,7 +65,7 @@ class HomeView(View):
         twitter = Twython(_API_KEY, _API_SECRET, social_token.token,
                           social_token.token_secret)
         timeline = twitter.get_home_timeline(**_TIMELINE_ARGS)
-        recent_tweets = _get_most_recent_sanders_tweets(username, timeline)
+        recent_tweets = []#_get_most_recent_sanders_tweets(username, timeline)
         tweet_context = []
         for tweeter, status_id in recent_tweets:
             tweet_vote = _TWEET_VOTE.format(username=tweeter)
