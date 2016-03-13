@@ -103,9 +103,9 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-
+STATICFILES_DIRS = ['app/static']
 STATIC_URL = '/static/'
-STATIC_ROOT = '/var/www/tweetbank'
+STATIC_ROOT = '/var/www/tweetbank/'
 
 # Django-allauth
 
