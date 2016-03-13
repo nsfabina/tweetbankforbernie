@@ -18,16 +18,16 @@ _TIMELINE_ARGS = {'count': 200, 'trim_user': False, 'exclude_replies': True,
                   'include_entities': True}
 _SANDERS_HASHTAGS = [
     'Bernie2016', 'BernieForPresident', 'BernieOrBust', 'BernieSanders', 'Bernie'
-    'Sanders2016', 'SandersForPresident', 'FeelTheBern'
+    'Sanders2016', 'SandersForPresident', 'FeelTheBern', 'PeopleForBernie'
     ]
 _TWEET_LIMIT = 20
 
-# Global variables for voting tweets
-_VOTE_TEXT = 'Remember to vote! Register on time! Dates and rules here:'
-_VOTE_URL = 'https://voteforbernie.org'
-_TWEET_VOTE = 'https://twitter.com/intent/tweet?text=@{username} ' + \
+# Global variables for activism tweets
+_TWEET_ACTIVISM_TEXT = 'Take action! Learn how you can help get out the vote: '
+_TWEET_ACTIVISM_URL = 'http://http://voteforbernie.org/GOTV/'
+_TWEET_ACTIVISM = 'https://twitter.com/intent/tweet?text=' + \
     '{text}&url={url}&hashtags=SandersForPresident,TweetBank4Bern&size=large'.format(
-        text=_VOTE_TEXT, url=_VOTE_URL)
+        text=_TWEET_ACTIVISM_TEXT, url=_TWEET_ACTIVISM_URL)
 
 # Global variables for banking tweets
 _TWEET_BANK_TEXT = 'Take one minute to help tweet voting info to your followers ' + \
@@ -37,13 +37,19 @@ _TWEET_BANK = 'https://twitter.com/intent/tweet?text=' + \
     '{text}&url={url}&hashtags=SandersForPresident,TweetBank4Bern&size=large'.format(
         text=_TWEET_BANK_TEXT, url=_TWEET_BANK_URL)
 
-# Global variables for activism tweets
-_TWEET_ACTIVISM_TEXT = 'Take action! Learn how you can help get out the vote: '
-_TWEET_ACTIVISM_URL = 'http://http://voteforbernie.org/GOTV/'
-_TWEET_ACTIVISM = 'https://twitter.com/intent/tweet?text=' + \
+# Global variables for banking tweets
+_TWEET_FACE_TEXT = 'Take one minute to share voting info with Facebook friends: '
+_TWEET_FACE_URL = 'http://berniefriendfinder.com'
+_TWEET_FACE = 'https://twitter.com/intent/tweet?text=' + \
     '{text}&url={url}&hashtags=SandersForPresident,TweetBank4Bern&size=large'.format(
-        text=_TWEET_ACTIVISM_TEXT, url=_TWEET_ACTIVISM_URL)
+        text=_TWEET_FACE_TEXT, url=_TWEET_FACE_URL)
 
+# Global variables for voting tweets
+_VOTE_TEXT = 'Remember to vote! Register on time! Dates and rules here:'
+_VOTE_URL = 'https://voteforbernie.org'
+_TWEET_VOTE = 'https://twitter.com/intent/tweet?text=@{username} ' + \
+    '{text}&url={url}&hashtags=SandersForPresident,TweetBank4Bern&size=large'.format(
+        text=_VOTE_TEXT, url=_VOTE_URL)
 
 
 class HomeView(View):
@@ -65,7 +71,9 @@ class HomeView(View):
             tweet_vote = _TWEET_VOTE.format(username=tweeter)
             tweet_context.append([status_id, tweet_vote])
         context = {'username': username, 'tweet_context': tweet_context,
-                   'tweet_help': _TWEET_BANK, 'tweet_activism': _TWEET_ACTIVISM}
+                   'tweet_activism': _TWEET_ACTIVISM, 'tweet_help': _TWEET_BANK,
+                   'tweet_face': _TWEET_FACE
+                   }
         return render(request, 'home.html', context=context)
 
 
