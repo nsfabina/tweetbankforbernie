@@ -65,7 +65,7 @@ class HomeView(View):
         twitter = Twython(_API_KEY, _API_SECRET, social_token.token,
                           social_token.token_secret)
         timeline = twitter.get_home_timeline(**_TIMELINE_ARGS)
-        recent_tweets = []#_get_most_recent_sanders_tweets(username, timeline)
+        recent_tweets = _get_most_recent_sanders_tweets(username, timeline)
         tweet_context = []
         for tweeter, status_id in recent_tweets:
             tweet_vote = _TWEET_VOTE.format(username=tweeter)
