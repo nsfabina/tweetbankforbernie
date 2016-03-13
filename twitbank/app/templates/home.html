@@ -11,7 +11,7 @@
 
 	<div class="row no-center" style="margin-bottom: 3rem">
     <div class="eight columns offset-by-two">
-  		<p><b>Welcome!</b> You're logged in with <b>Twitter</b> as <b>{{ user }}</b>. <img src="/static/images/twitter.png" style="height: 3rem; vertical-align: -5px"></p>
+  		<p><b>Welcome!</b> You're logged in with <b>Twitter</b> as <b>{{ username }}</b>. <img src="/static/images/twitter.png" style="height: 3rem; vertical-align: -5px"></p>
   	</div>
   </div>
 
@@ -38,16 +38,17 @@
 	  	</div>
 	  </div>
 
-	 	{% for tweets in tweet_context %}
+	 	{% for tweet in tweet_context %}
 	 		<div class="row">
-	 			{% if forloop.counter|divisibleby:2 %}
-	 				<div class="eight columns offset-by-two" style="background-color: rgb(225, 225, 225);">
-	 			{% else %}
-	 				<div class="eight columns offset-by-two" style="background-color: rgb(204, 225, 255);">
-	 			{% endif %}
+	 			<div class="eight columns offset-by-two"
+	 				{% if forloop.counter|divisibleby:2 %}
+	 				 	style="background-color: rgb(225, 225, 225);">
+	 				{% else %}
+	 					style="background-color: rgb(204, 225, 255);">
+	 				{% endif %}
 	 				<br>
-					{{ tweets.0 |safe }}
-		  		<p>Share voting information with this follower:  <a class="twitter-share-button" href="{{ tweets.1 }}"></a></p>
+	 				<div id="{{ tweet.0 }}" class="tweet-oembed"></div>
+		  		<p>Share voting information with this follower:  <a class="twitter-share-button" href="{{ tweet.1 }}"></a></p>
 		  	</div>
 		  </div>
 		{% endfor %}
@@ -69,22 +70,33 @@
 	  </div>
 	{% endif %}
 
-	<script>window.twttr = (function(d, s, id) {
-	  var js, fjs = d.getElementsByTagName(s)[0],
-	    t = window.twttr || {};
-	  if (d.getElementById(id)) return t;
-	  js = d.createElement(s);
-	  js.id = id;
-	  js.src = "https://platform.twitter.com/widgets.js";
-	  fjs.parentNode.insertBefore(js, fjs);
-	 
-	  t._e = [];
-	  t.ready = function(f) {
-	    t._e.push(f);
-	  };
-	 
-	  return t;
-	}(document, "script", "twitter-wjs"));</script>
+	<script>
+		window.twttr = (function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0],
+		    t = window.twttr || {};
+		  if (d.getElementById(id)) return t;
+		  js = d.createElement(s);
+		  js.id = id;
+		  js.src = "https://platform.twitter.com/widgets.js";
+		  fjs.parentNode.insertBefore(js, fjs);
+		 
+		  t._e = [];
+		  t.ready = function(f) {
+		    t._e.push(f);
+		  };
+		 
+		  return t;
+		}(document, "script", "twitter-wjs"));
+		
+		twttr.ready(function (twttr) {
+			var elements = document.getElementsByClassName("tweet-oembed");
+			var options = {"cards": "hidden", "conversation": "none",
+				  					 "theme": "light", "width": 550, "align": "center"}
+			for (var idx = 0; idx < elements.length; idx++) {
+				twttr.widgets.createTweet(elements[idx].id, elements[idx], options);
+			}
+		});
+	</script>
 
 {% else %}
 
@@ -111,7 +123,7 @@
     </div>
 	  <div class="four columns offset-by-four">
 	    {% load socialaccount %}
-  		<p><a href="{% provider_login_url "twitter" %}" class="button button-primary">Log in</a></p>
+  		<p><a href="{% provider_login_url "twitter" %}" class="button button-primary">Log in with Twitter</a></p>
   	</div>
   </div>
 
