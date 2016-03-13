@@ -3,12 +3,6 @@
 {% block content %}
 {% if user.is_authenticated %}
 
-	<div class="row" style="margin-bottom: 5rem">
-  	<div class="four columns offset-by-four">
-  		 <a id="logout" href="/accounts/logout" class="button btn btn-success">Logout</a>
-  	</div>
-  </div>
-
 	<div class="row no-center" style="margin-bottom: 3rem">
     <div class="eight columns offset-by-two">
   		<p><b>Welcome!</b> You're logged in with <b>Twitter</b> as <b>{{ username }}</b>. <img src="/static/images/twitter.png" style="height: 3rem; vertical-align: -5px"></p>
@@ -70,34 +64,6 @@
 	  </div>
 	{% endif %}
 
-	<script>
-		window.twttr = (function(d, s, id) {
-		  var js, fjs = d.getElementsByTagName(s)[0],
-		    t = window.twttr || {};
-		  if (d.getElementById(id)) return t;
-		  js = d.createElement(s);
-		  js.id = id;
-		  js.src = "https://platform.twitter.com/widgets.js";
-		  fjs.parentNode.insertBefore(js, fjs);
-		 
-		  t._e = [];
-		  t.ready = function(f) {
-		    t._e.push(f);
-		  };
-		 
-		  return t;
-		}(document, "script", "twitter-wjs"));
-		
-		twttr.ready(function (twttr) {
-			var elements = document.getElementsByClassName("tweet-oembed");
-			var options = {"cards": "hidden", "conversation": "none",
-				  					 "theme": "light", "width": 550, "align": "center"}
-			for (var idx = 0; idx < elements.length; idx++) {
-				twttr.widgets.createTweet(elements[idx].id, elements[idx], options);
-			}
-		});
-	</script>
-
 {% else %}
 
 	<div class="row" style="margin-bottom: 5rem">
@@ -129,10 +95,18 @@
 
 {% endif %}
 
-  <div class="row" style="margin-top: 3rem">
-    <div class="four columns offset-by-four">
-      <p><a href="faqs">Frequently asked questions</a></p>
-    </div>
-  </div> 
+<div class="row" style="margin-top: 3rem">
+  <div class="four columns offset-by-four">
+    <p><a href="faqs">Frequently asked questions</a></p>
+  </div>
+</div> 
+
+{% if user.is_authenticated %}
+  <div class="row">
+  	<div class="four columns offset-by-four">
+  		 <a id="logout" href="/accounts/logout" class="button btn btn-success">Logout</a>
+  	</div>
+  </div>
+{% endif %}
 
 {% endblock %}
