@@ -18,8 +18,11 @@ ADD uwsgi /home/uwsgi
 ADD supervisor /home/supervisor
 ADD tweetbank /home/tweetbank
 
-# Prepare static resources
+# Prepare database
 WORKDIR /home/tweetbank/
+RUN cp db.sqlite3.master db.sqlite3
+
+# Prepare static resources
 RUN python manage.py collectstatic --clear --link --noinput
 
 # Configure utilities
