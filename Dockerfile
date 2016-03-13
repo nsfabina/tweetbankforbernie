@@ -3,7 +3,7 @@ FROM ubuntu:trusty
 
 # Install dependencies via apt
 RUN apt-get update && \
-	apt-get install vim -y
+	apt-get install vim -y && \
     apt-get install python python-dev python-setuptools python-pip -y && \
     apt-get install uwsgi uwsgi-plugin-python -y && \
     apt-get install nginx supervisor -y
