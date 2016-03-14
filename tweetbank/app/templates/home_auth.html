@@ -1,0 +1,46 @@
+{% extends 'base_auth.html' %}
+
+{% block tweet_content %}
+
+{% if tweet_context %}
+ 	<div class="row">
+  	<div class="eight columns offset-by-two">
+  		{% if tweet_context|length > 1 %}
+  			<p><b>These are the {{ tweet_context|length }} most-recent tweets from your timeline with pro-Bernie hashtags.</b></p>
+  		{% else %}
+  			<p><b>This is the only most-recent tweet from your timeline with pro-Bernie hashtags.</b></p>
+  		{% endif %}
+      <p>Remember to personalize your tweets.</p>
+  	</div>
+  </div>
+
+ 	{% for tweet in tweet_context %}
+ 		<div class="row">
+ 			<div class="eight columns offset-by-two"
+ 				{% if forloop.counter|divisibleby:2 %}
+ 				 	style="background-color: rgb(225, 225, 225);">
+ 				{% else %}
+ 					style="background-color: rgb(204, 225, 255);">
+ 				{% endif %}
+ 				<br>
+ 				{{ tweet.0 |safe }}
+	  		<p>Share voting information with this follower:  <a class="twitter-share-button" href="{{ tweet.1 }}"></a></p>
+	  	</div>
+	  </div>
+	{% endfor %}
+	  
+{% else %}
+  <div class="row">
+  	<div class="eight columns offset-by-two">
+  		<p><b>Currently, there are no recent tweets on your timeline with pro-Bernie hashtags.</b></p>
+  	</div>
+  </div>
+{% endif %}
+
+<div class="row">
+  <div class="eight columns offset-by-two">
+    <p>Check back in the future to find new tweets on your timeline or new TweetBanking features.</p>
+  </div>
+</div>
+
+{% endblock %}

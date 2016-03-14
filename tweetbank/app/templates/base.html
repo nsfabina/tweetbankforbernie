@@ -33,7 +33,52 @@
 
 <div class="container center" style="margin-bottom: 5rem">
   {% block content %}{% endblock %}
+
+  <div class="row" style="margin-top: 5rem; margin-bottom: 3rem">
+    <div class="four columns">
+      <p><a href="http://voteforbernie.org/GOTV/">Help get out the vote in other ways</a></p>
+    </div>
+    <div class="four columns">
+      <p><a href="http://berniefriendfinder.com">Contact Facebook friends about voting</a></p>
+    </div>
+    <div class="four columns">
+      <p><a href="https://berniesanders.com">Donate to Bernie at his official site</a></p>
+    </div>
+  </div>
+
+  <div class="row" style="margin-bottom: 3rem">
+    <div class="four columns offset-by-four">
+      <p><a href="faqs">Frequently asked questions</a></p>
+    </div>
+  </div> 
+
+  {% if user.is_authenticated %}
+    <div class="row">
+      <div class="four columns offset-by-four">
+         <a id="logout" href="/accounts/logout" class="button btn btn-success">Logout</a>
+      </div>
+    </div>
+  {% endif %}
 </div>
+
+<script>
+  window.twttr = (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0],
+      t = window.twttr || {};
+    if (d.getElementById(id)) return t;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js, fjs);
+   
+    t._e = [];
+    t.ready = function(f) {
+      t._e.push(f);
+    };
+   
+    return t;
+  }(document, "script", "twitter-wjs"));
+</script>
 
 </body>
 

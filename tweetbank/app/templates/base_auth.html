@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row" style="margin-bottom: 3rem">
+  <div class="eight columns offset-by-two">
+		<p><b>Welcome!</b> You're logged in with <b>Twitter</b> as <b>{{ username }}</b>. <img src="/static/images/twitter.png" style="height: 3rem; vertical-align: -5px"></p>
+	</div>
+</div>
+
+<div class="row" style="margin-bottom: 5rem">
+  <div class="four columns">
+    <p>Share <b>GOTV</b> info with your followers<br><a class="twitter-share-button" href="{{ tweet_activism }}">{{ Tweet }}</a></p>
+  </div>
+  <div class="four columns">
+    <p>Ask your followers for help <b>TweetBanking</b><br><a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
+  </div>
+  <div class="four columns">
+    <p>Ask your followers for help <b>FaceBanking</b><br><a class="twitter-share-button" href="{{ tweet_face }}">{{ Tweet }}</a></p>
+  </div>
+</div>
+
+{% block tweet_content %}
+{% endblock %}
+
+{% endblock %}

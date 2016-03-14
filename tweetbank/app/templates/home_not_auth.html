@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row" style="margin-bottom: 5rem">
+	<div class="four columns offset-by-four">
+		{% load socialaccount %}
+		<a href="{% provider_login_url "twitter" %}" class="button button-primary">Log in with Twitter</a>
+	</div>
+</div>
+
+<div class="row">
+  <div class="eight columns offset-by-two">
+  	<p><b>Remind your Twitter followers of important voting dates and rules.</b></p>
+  </div>
+  <div class="six columns offset-by-three no-center">
+  	<ul>
+  	  <li>Step 1:  Sign in with your Twitter account.</li>
+  	  <li>Step 2:  See which of your followers are likely Bernie supporters.</li>
+  	  <li>Step 3:  Send pre-generated tweets only to selected followers.</li>
+  	</ul>
+	</div>
+	<div class="eight columns offset-by-two">
+  	<p><b>Log in and take a look around!</b></p>
+  </div>
+  <div class="four columns offset-by-four">
+    {% load socialaccount %}
+		<p><a href="{% provider_login_url "twitter" %}" class="button button-primary">Log in with Twitter</a></p>
+	</div>
+</div>
+
+{% endblock %}
