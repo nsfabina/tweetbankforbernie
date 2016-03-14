@@ -62,9 +62,9 @@ _TWEET_VOTE = 'https://twitter.com/intent/tweet?text=@{username} ' + \
 # Global variables for random tweets
 _TWEET_STATE_TEXT = '{state} votes on Tuesday! Rules and other info here:'
 _TWEET_STATE_URL = 'https://voteforbernie.org'
-_TWEET_STATE = 'https://twitter.com/intent/tweet?text={text}&url={url}'.format(
-        text=_TWEET_STATE_TEXT, url=_TWEET_STATE_URL) + '&in-reply-to={id_}&size=large'
-
+_TWEET_STATE = 'https://twitter.com/intent/tweet?text=@{username} ' + \
+    '{text}&url={url}&hashtags=SandersForPresident,TweetBank4Bern&size=large'.format(
+        text=_TWEET_STATE_TEXT, url=_TWEET_STATE_URL)
 # Default context values for tweets
 _DEFAULT_CONTEXT = {'tweet_activism': _TWEET_ACTIVISM, 'tweet_help': _TWEET_BANK,
                     'tweet_face': _TWEET_FACE}
@@ -232,11 +232,12 @@ def _format_sanders_state_tweets(tweets):
     tweet_context = []
     unique_tweeters = []
     for tweet in reversed(tweets):
+        print tweet
         # Ignore retweets
         if tweet.get('retweeted_status', None) is not None:
             continue
         # Ignore tweets by tweeters already observed
-        tweeter = tweet['user']['id']
+        tweeter = tweet['user']['screen_name']
         if tweeter in unique_tweeters:
             continue
         # Update recent tweets and unique tweeters
@@ -257,6 +258,6 @@ def _format_tweet_context_from_state_tweets(twitter, tweets, state):
     for tweeter, tweet_id in tweets:
         status_blockquote = twitter.get_oembed_tweet(
             id=tweet_id, **_OEMBED_PARAMS)['html']
-        tweet_vote = _TWEET_STATE.format(state=state, id_=tweet_id)
+        tweet_vote = _TWEET_STATE.format(username=tweeter, state=state)
         tweet_context.append([status_blockquote, tweet_vote])
     return tweet_context
