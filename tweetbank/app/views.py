@@ -70,8 +70,12 @@ _DEFAULT_CONTEXT = {'tweet_activism': _TWEET_ACTIVISM, 'tweet_help': _TWEET_BANK
                     'tweet_face': _TWEET_FACE}
 
 # State information
+_STATE_QUERY = '#' + ' OR #'.join(_TWEET_HASHTAGS)
+_STATE_GEOCODES = {'FL': '27.469287473692045,-83.232421875,250mi'}
+_STATE_SEARCH_PARAMS = {'result_type': 'recent'}
+_STATE_SEARCH_PARAMS.update(_SEARCH_PARAMS)
 _STATE_NAME = {'FL': 'Florida'}
-_VOTING_DAYS = {'FL': 'Tuesday'}
+_STATE_VOTING_DAYS = {'FL': 'Tuesday'}
 
 
 class HomeView(View):
@@ -163,7 +167,7 @@ class StateView(View):
         context = {
             'username': username, 'tweet_context': tweet_context,
             'state': _STATE_NAME[self.state],
-            'day_of_week': _VOTING_DAYS[self.state]}
+            'day_of_week': _STATE_VOTING_DAYS[self.state]}
         context.update(_DEFAULT_CONTEXT)
         return render(request, 'state.html', context=context)
 
@@ -183,7 +187,7 @@ def _get_random_sanders_state_tweets(twitter, state):
     Get Sanders tweets from Florida in a random timeperiod.
     """
     max_id = _get_random_tweet_id(twitter)
-    tweets = _get_sanders_state_tweets(twitter, max_id)
+    tweets = _get_sanders_state_tweets(twitter, state, max_id)
     return _format_sanders_state_tweets(tweets)
 
 
@@ -200,11 +204,14 @@ def _get_random_tweet_id(twitter):
     return random.randint(id_finish, id_start)
 
 
-def _get_sanders_state_tweets(twitter, max_id):
+def _get_sanders_state_tweets(twitter, state, max_id):
     """
     Get state tweets with pro-Bernie hashtags.
     """
-    return twitter.search(q='#FeelTheBern', max_id=max_id, **_SEARCH_PARAMS)['statuses']
+    _STATE_QUERY = '#' + ' OR #'.join(_TWEET_HASHTAGS)
+    return twitter.search(
+        q=_STATE_QUERY, max_id=max_id, geocode=_STATE_GEOCODES[state],
+        **_STATE_SEARCH_PARAMS)['statuses']
 
 
 def _format_sanders_state_tweets(tweets):
