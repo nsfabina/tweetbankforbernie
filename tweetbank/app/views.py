@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 
+from datetime import datetime, timedelta
 import json
+import random
 import requests
 
 from allauth.socialaccount.models import SocialToken
@@ -17,10 +19,18 @@ _API_SECRET = 'cToHwLmAlWOjOXtV3kt0L0Sgo6y5FJUaehzBAFQFJgYjWuvEBh'
 _TIMELINE_ARGS = {'count': 200, 'trim_user': False, 'exclude_replies': True,
                   'include_entities': True}
 _SANDERS_HASHTAGS = [
-    'Bernie2016', 'BernieForPresident', 'BernieOrBust', 'BernieSanders', 'Bernie'
+    'Bernie2016', 'BernieForPresident', 'BernieOrBust', 'BernieSanders',
     'Sanders2016', 'SandersForPresident', 'FeelTheBern', 'PeopleForBernie'
     ]
-_TWEET_LIMIT = 20
+_TIMELINE_TWEET_LIMIT = 20
+
+# Random search parameters
+_RANDOM_ARGS = {'count': 10, 'trim_user': True, 'exclude_replies': True,
+                'include_entities': True}
+
+# oembed parameters
+_OEMBED_ARGS = {'maxwidth': 550, 'hide_media': True, 'hide_thread': True,
+                'omit_script': True, 'align': 'center'}
 
 # Global variables for activism tweets
 _TWEET_ACTIVISM_TEXT = 'Take action! Learn how you can help get out the vote: '
@@ -51,6 +61,12 @@ _TWEET_VOTE = 'https://twitter.com/intent/tweet?text=@{username} ' + \
     '{text}&url={url}&hashtags=SandersForPresident,TweetBank4Bern&size=large'.format(
         text=_VOTE_TEXT, url=_VOTE_URL)
 
+# Global variables for random tweets
+_RANDOM_TEXT = 'Florida votes on Tuesday! Rules and other info here:'
+_RANDOM_URL = 'https://voteforbernie.org'
+_RANDOM_VOTE = 'https://twitter.com/intent/tweet?text={text}&url={url}'.format(
+        text=_RANDOM_TEXT, url=_RANDOM_URL) + '&in-reply-to={id_}&size=large'
+
 
 class HomeView(View):
 
@@ -64,15 +80,24 @@ class HomeView(View):
             account__user=username, account__provider='twitter')[0]
         twitter = Twython(_API_KEY, _API_SECRET, social_token.token,
                           social_token.token_secret)
+        # Get home timeline
         timeline = twitter.get_home_timeline(**_TIMELINE_ARGS)
         recent_tweets = _get_most_recent_sanders_tweets(username, timeline)
         tweet_context = []
         for tweeter, status_id in recent_tweets:
             tweet_vote = _TWEET_VOTE.format(username=tweeter)
             tweet_context.append([status_id, tweet_vote])
+        # Get Florida tweets
+        florida_tweets = _get_random_sanders_florida_tweets(twitter)
+        random_context = []
+        for tweeter, status_id in florida_tweets:
+            status_blockquote = twitter.get_oembed_tweet(id=status_id, **_OEMBED_ARGS)['html']
+            tweet_vote = _RANDOM_VOTE.format(id_=status_id)
+            random_context.append([status_blockquote, tweet_vote])
+        print random_context
         context = {'username': username, 'tweet_context': tweet_context,
                    'tweet_activism': _TWEET_ACTIVISM, 'tweet_help': _TWEET_BANK,
-                   'tweet_face': _TWEET_FACE
+                   'tweet_face': _TWEET_FACE, 'random_context': random_context
                    }
         return render(request, 'home.html', context=context)
 
@@ -110,6 +135,74 @@ def _get_most_recent_sanders_tweets(username, timeline):
         recent_tweets.append([tweeter, status_id])
         unique_tweeters.append(tweeter)
         # Stop if tweet limit reached
-        if len(recent_tweets) >= _TWEET_LIMIT:
+        if len(recent_tweets) >= _TIMELINE_TWEET_LIMIT:
             break
     return recent_tweets
+
+
+def _get_random_sanders_florida_tweets(twitter):
+    """
+    Get Sanders tweets from Florida in a random timeperiod.
+    """
+    # Get tweet IDs to bookend the random timeperiod    
+    date_start = datetime.strftime(datetime.now(), '%Y-%m-%d')
+    date_finish = datetime.strftime(datetime.now() - timedelta(days=6), '%Y-%m-%d') 
+    id_start = twitter.search(q='a', until=date_start, count=1)['statuses'][0]['id']
+    id_finish = twitter.search(q='a', until=date_finish, count=1)['statuses'][0]['id']
+    # Set query parameters
+    id_max = random.randint(id_finish, id_start)
+    florida_tweets = twitter.search(q='#FeelTheBern', max_id=id_max, **_RANDOM_ARGS)['statuses']
+    # Step through tweets in reverse order to only use most recent
+    recent_tweets = []
+    unique_tweeters = []
+    for tweet in reversed(florida_tweets):
+        # Ignore retweets
+        if tweet.get('retweeted_status', None) is not None:
+            continue
+        # Ignore tweets by tweeters already observed
+        tweeter = tweet['user']['id']
+        if tweeter in unique_tweeters:
+            continue
+        # Update recent tweets and unique tweeters
+        status_id = tweet['id']
+        recent_tweets.append([tweeter, status_id])
+        unique_tweeters.append(tweeter)
+        # Stop if tweet limit reached
+        if len(recent_tweets) >= _TIMELINE_TWEET_LIMIT:
+            break
+    return recent_tweets
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

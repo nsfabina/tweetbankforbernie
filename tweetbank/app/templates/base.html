@@ -35,34 +35,6 @@
   {% block content %}{% endblock %}
 </div>
 
-<script>
-  window.twttr = (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0],
-      t = window.twttr || {};
-    if (d.getElementById(id)) return t;
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "https://platform.twitter.com/widgets.js";
-    fjs.parentNode.insertBefore(js, fjs);
-   
-    t._e = [];
-    t.ready = function(f) {
-      t._e.push(f);
-    };
-   
-    return t;
-  }(document, "script", "twitter-wjs"));
-  
-  twttr.ready(function (twttr) {
-    var elements = document.getElementsByClassName("tweet-oembed");
-    var options = {"cards": "hidden", "conversation": "none",
-                   "theme": "light", "width": 550, "align": "center"}
-    for (var idx = 0; idx < elements.length; idx++) {
-      twttr.widgets.createTweet(elements[idx].id, elements[idx], options);
-    }
-  });
-</script>
-
 </body>
 
 </html>

@@ -29,6 +29,7 @@
 	  		{% else %}
 	  			<p><b>This is the only most-recent tweet from your timeline with pro-Bernie hashtags.</b></p>
 	  		{% endif %}
+        <p>Remember to personalize your tweets.</p>
 	  	</div>
 	  </div>
 
@@ -41,28 +42,46 @@
 	 					style="background-color: rgb(204, 225, 255);">
 	 				{% endif %}
 	 				<br>
-	 				<div id="{{ tweet.0 }}" class="tweet-oembed"></div>
+	 				{{ tweet.0 |safe }}
 		  		<p>Share voting information with this follower:  <a class="twitter-share-button" href="{{ tweet.1 }}"></a></p>
 		  	</div>
 		  </div>
 		{% endfor %}
 		  
-	  <div class="row">
-	    <div class="eight columns offset-by-two">
-	    	<br>
-	      <p>Done already?</p>
-	      <p>Visit us again later, and ask your followers to help TweetBank for Bernie:  <a class="twitter-share-button" href="{{ tweet_help }}">{{ Tweet }}</a></p>
-	    </div>
-	  </div>
 	{% else %}
-		 <div class="row">
+    <div class="row">
 	  	<div class="eight columns offset-by-two">
 	  		<p><b>Currently, there are no recent tweets on your timeline with pro-Bernie hashtags.</b></p>
-
-	 			<p>Check back in the future to find new tweets on your timeline or new TweetBanking features.</p>
 	  	</div>
 	  </div>
 	{% endif %}
+
+  <div class="row">
+    <div class="eight columns offset-by-two">
+      <p><b>Florida votes on Tuesday! Here is a random selection of tweets nearby Florida.</b></p>
+    </div>
+  </div>
+      
+  {% for tweet in random_context %}
+    <div class="row">
+      <div class="eight columns offset-by-two"
+        {% if forloop.counter|divisibleby:2 %}
+          style="background-color: rgb(225, 225, 225);">
+        {% else %}
+          style="background-color: rgb(204, 225, 255);">
+        {% endif %}
+        <br>
+        {{ tweet.0 |safe }}
+        <p>Make a new friend by sharing voting information:  <a class="twitter-share-button" href="{{ tweet.1 }}"></a></p>
+      </div>
+    </div>
+  {% endfor %}
+
+  <div class="row">
+    <div class="eight columns offset-by-two">
+      <p>Check back in the future to find new tweets on your timeline or new TweetBanking features.</p>
+    </div>
+  </div>
 
 {% else %}
 
@@ -120,5 +139,24 @@
   	</div>
   </div>
 {% endif %}
+
+  <script>
+    window.twttr = (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {};
+      if (d.getElementById(id)) return t;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://platform.twitter.com/widgets.js";
+      fjs.parentNode.insertBefore(js, fjs);
+     
+      t._e = [];
+      t.ready = function(f) {
+        t._e.push(f);
+      };
+     
+      return t;
+    }(document, "script", "twitter-wjs"));
+  </script>
 
 {% endblock %}
