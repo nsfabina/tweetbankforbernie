@@ -71,11 +71,22 @@ _DEFAULT_CONTEXT = {'tweet_activism': _TWEET_ACTIVISM, 'tweet_help': _TWEET_BANK
 
 # State information
 _STATE_QUERY = '#' + ' OR #'.join(_TWEET_HASHTAGS)
-_STATE_GEOCODES = {'FL': '27.469287473692045,-83.232421875,250mi'}
+_STATE_GEOCODES = {'FL': ['27.469287473692045,-83.232421875,250mi'],
+                   'IL': ['41.120745590167445,-89.2254638671875,110mi',
+                          '40.30466538259176,-89.4232177734375,110mi',
+                          '38.24680876017449,-88.8739013671875,65mi'],
+                   'MO': ['38.53097889440029,-92.493896484375,140mi'],
+                   'NC': ['35.12889434101053,-77.4920654296875,110mi',
+                          '35.7019167328534,-80.1068115234375,80mi',
+                          '35.80890404406865,-81.9525146484375,50mi'],
+                   'OH': ['39.83385008019453,-83.2928466796875,95mi',
+                          '40.58058466412764,-82.825927734375,95mi',
+                          '41.02135510866603,-81.9305419921875,80mi']}
 _STATE_SEARCH_PARAMS = {'result_type': 'recent'}
 _STATE_SEARCH_PARAMS.update(_SEARCH_PARAMS)
-_STATE_NAME = {'FL': 'Florida'}
-_STATE_VOTING_DAYS = {'FL': 'Tuesday'}
+_STATE_NAME = {'FL': 'Florida', 'IL': 'Illinois', 'MO': 'Missouri',
+               'NC': 'North Carolina', 'OH': 'Ohio'}
+_STATE_VOTING_DAYS = {state: 'Tuesday' for state in ['FL', 'IL', 'MO', 'NC', 'OH']}
 
 
 class HomeView(View):
@@ -209,9 +220,9 @@ def _get_sanders_state_tweets(twitter, state, max_id):
     Get state tweets with pro-Bernie hashtags.
     """
     _STATE_QUERY = '#' + ' OR #'.join(_TWEET_HASHTAGS)
-    return twitter.search(
-        q=_STATE_QUERY, max_id=max_id, geocode=_STATE_GEOCODES[state],
-        **_STATE_SEARCH_PARAMS)['statuses']
+    geocode = random.choice(_STATE_GEOCODES[state])
+    return twitter.search(q=_STATE_QUERY, max_id=max_id, geocode=geocode,
+                          **_STATE_SEARCH_PARAMS)['statuses']
 
 
 def _format_sanders_state_tweets(tweets):
