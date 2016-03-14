@@ -65,6 +65,14 @@ _TWEET_STATE_URL = 'https://voteforbernie.org'
 _TWEET_STATE = 'https://twitter.com/intent/tweet?text={text}&url={url}'.format(
         text=_TWEET_STATE_TEXT, url=_TWEET_STATE_URL) + '&in-reply-to={id_}&size=large'
 
+# Default context values for tweets
+_DEFAULT_CONTEXT = {'tweet_activism': _TWEET_ACTIVISM, 'tweet_help': _TWEET_BANK,
+                    'tweet_face': _TWEET_FACE}
+
+# State information
+_STATE_NAME = {'FL': 'Florida'}
+_VOTING_DAYS = {'FL': 'Tuesday'}
+
 
 class HomeView(View):
 
@@ -72,60 +80,26 @@ class HomeView(View):
         # Return home page if user not authenticated
         if request.user.is_authenticated() is False: 
             return render(request, 'home_not_auth.html')
-        # Get Twitter instance for user
+        # Get recent timeline tweets
         username = request.user
-        social_token = SocialToken.objects.filter(
-            account__user=username, account__provider='twitter')[0]
-        twitter = Twython(_API_KEY, _API_SECRET, social_token.token,
-                          social_token.token_secret)
-        # Get home timeline
+        twitter = _get_twitter_instance_for_user(username)
         timeline = twitter.get_home_timeline(**_SEARCH_PARAMS)
-        tweets = _get_most_recent_sanders_tweets(username, timeline)
-        tweet_context = []
-        for tweeter, tweet_id in tweets:
-            status_blockquote = twitter.get_oembed_tweet(id=tweet_id, **_OEMBED_PARAMS)['html']
-            tweet_vote = _TWEET_VOTE.format(username=tweeter)
-            tweet_context.append([status_blockquote, tweet_vote])
-        context = {'username': username, 'tweet_context': tweet_context,
-                   'tweet_activism': _TWEET_ACTIVISM, 'tweet_help': _TWEET_BANK,
-                   'tweet_face': _TWEET_FACE
-                   }
+        # Format context
+        tweets = _format_sanders_recent_tweets(username, timeline)
+        tweet_context = _format_tweet_context_from_recent_tweets(
+            twitter, tweets)
+        context = {
+            'username': username, 'tweet_context': tweet_context}
+        context.update(_DEFAULT_CONTEXT)
         return render(request, 'home_auth.html', context=context)
 
 
-class StateView(View):
-
-    def get(self, request, *args, **kwargs):
-        # Return home page if user not authenticated
-        if request.user.is_authenticated() is False: 
-            return render(request, 'home_not_auth.html')
-        # Get Twitter instance for user
-        username = request.user
-        social_token = SocialToken.objects.filter(
-            account__user=username, account__provider='twitter')[0]
-        twitter = Twython(_API_KEY, _API_SECRET, social_token.token,
-                          social_token.token_secret)
-        # Get state tweets
-        state = 'FL'
-        tweets = _get_random_sanders_state_tweets(twitter, state)
-        tweet_context = []
-        for tweeter, tweet_id in tweets:
-            status_blockquote = twitter.get_oembed_tweet(id=tweet_id, **_OEMBED_PARAMS)['html']
-            tweet_vote = _TWEET_STATE.format(id_=tweet_id)
-            tweet_context.append([status_blockquote, tweet_vote])
-        context = {'username': username, 'tweet_context': tweet_context,
-                   'tweet_activism': _TWEET_ACTIVISM, 'tweet_help': _TWEET_BANK,
-                   'tweet_face': _TWEET_FACE
-                   }
-        return render(request, 'state.html', context=context)
-
-
-def _get_most_recent_sanders_tweets(username, timeline):
+def _format_sanders_recent_tweets(username, timeline):
     """
     Get the most recent Sanders tweets from timeline.
     """
     # Step through tweets in reverse order to only use most recent
-    recent_tweets = []
+    tweets = []
     unique_tweeters = []
     for tweet in reversed(timeline):
         # Ignore retweets
@@ -150,30 +124,96 @@ def _get_most_recent_sanders_tweets(username, timeline):
             continue
         # Update recent tweets and unique tweeters
         status_id = tweet['id']
-        recent_tweets.append([tweeter, status_id])
+        tweets.append([tweeter, status_id])
         unique_tweeters.append(tweeter)
         # Stop if tweet limit reached
-        if len(recent_tweets) >= _TIMELINE_TWEET_LIMIT:
+        if len(tweets) >= _TIMELINE_TWEET_LIMIT:
             break
-    return recent_tweets
+    return tweets
 
 
-def _get_random_sanders_florida_tweets(twitter, state):
+def _format_tweet_context_from_recent_tweets(twitter, tweets):
+    """
+    Gets tweet IDs and tweet cards for recent tweets.
+    """
+    tweet_context = []
+    for tweeter, tweet_id in tweets:
+        status_blockquote = twitter.get_oembed_tweet(
+            id=tweet_id, **_OEMBED_PARAMS)['html']
+        tweet_vote = _TWEET_VOTE.format(username=tweeter)
+        tweet_context.append([status_blockquote, tweet_vote])
+    return tweet_context
+
+
+class StateView(View):
+
+    state = None
+
+    def get(self, request, *args, **kwargs):
+        # Return home page if user not authenticated
+        if request.user.is_authenticated() is False: 
+            return render(request, 'home_not_auth.html')
+        # Get state tweets
+        username = request.user
+        twitter = _get_twitter_instance_for_user(username)
+        tweets = _get_random_sanders_state_tweets(twitter, self.state)
+        # Format context
+        tweet_context = _format_tweet_context_from_state_tweets(
+            twitter, tweets, self.state)
+        context = {
+            'username': username, 'tweet_context': tweet_context,
+            'state': _STATE_NAME[self.state],
+            'day_of_week': _VOTING_DAYS[self.state]}
+        context.update(_DEFAULT_CONTEXT)
+        return render(request, 'state.html', context=context)
+
+
+def _get_twitter_instance_for_user(username):
+    """
+    Get a Twython twitter instance for a user.
+    """
+    social_token = SocialToken.objects.filter(
+        account__user=username, account__provider='twitter')[0]
+    return Twython(_API_KEY, _API_SECRET, social_token.token,
+                   social_token.token_secret)
+
+
+def _get_random_sanders_state_tweets(twitter, state):
     """
     Get Sanders tweets from Florida in a random timeperiod.
+    """
+    max_id = _get_random_tweet_id(twitter)
+    tweets = _get_sanders_state_tweets(twitter, max_id)
+    return _format_sanders_state_tweets(tweets)
+
+
+def _get_random_tweet_id(twitter):
+    """
+    Get a random tweet ID from sometime in the last week.
     """
     # Get tweet IDs to bookend the random timeperiod    
     date_start = datetime.strftime(datetime.now(), '%Y-%m-%d')
     date_finish = datetime.strftime(datetime.now() - timedelta(days=6), '%Y-%m-%d') 
     id_start = twitter.search(q='a', until=date_start, count=1)['statuses'][0]['id']
     id_finish = twitter.search(q='a', until=date_finish, count=1)['statuses'][0]['id']
-    # Set query parameters
-    id_max = random.randint(id_finish, id_start)
-    florida_tweets = twitter.search(q='#FeelTheBern', max_id=id_max, **_SEARCH_PARAMS)['statuses']
-    # Step through tweets in reverse order to only use most recent
-    recent_tweets = []
+    # Return a random tweet ID between the start and finish ID
+    return random.randint(id_finish, id_start)
+
+
+def _get_sanders_state_tweets(twitter, max_id):
+    """
+    Get state tweets with pro-Bernie hashtags.
+    """
+    return twitter.search(q='#FeelTheBern', max_id=max_id, **_SEARCH_PARAMS)['statuses']
+
+
+def _format_sanders_state_tweets(tweets):
+    """
+    Gets tweeters and tweet IDs for unique tweeters in a state.
+    """
+    tweet_context = []
     unique_tweeters = []
-    for tweet in reversed(florida_tweets):
+    for tweet in reversed(tweets):
         # Ignore retweets
         if tweet.get('retweeted_status', None) is not None:
             continue
@@ -183,44 +223,22 @@ def _get_random_sanders_florida_tweets(twitter, state):
             continue
         # Update recent tweets and unique tweeters
         status_id = tweet['id']
-        recent_tweets.append([tweeter, status_id])
+        tweet_context.append([tweeter, status_id])
         unique_tweeters.append(tweeter)
         # Stop if tweet limit reached
-        if len(recent_tweets) >= _TIMELINE_TWEET_LIMIT:
+        if len(tweet_context) >= _TWEET_LIMIT:
             break
-    return recent_tweets
+    return tweet_context
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def _format_tweet_context_from_state_tweets(twitter, tweets, state):
+    """
+    Gets tweet IDs and tweet cards for state tweets.
+    """
+    tweet_context = []
+    for tweeter, tweet_id in tweets:
+        status_blockquote = twitter.get_oembed_tweet(
+            id=tweet_id, **_OEMBED_PARAMS)['html']
+        tweet_vote = _TWEET_STATE.format(state=state, id_=tweet_id)
+        tweet_context.append([status_blockquote, tweet_vote])
+    return tweet_context

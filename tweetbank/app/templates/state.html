@@ -4,7 +4,7 @@
 
 <div class="row">
   <div class="eight columns offset-by-two">
-    <p><b>{{ state }} votes on {{ day_of_week }}! Here is a selection of tweets from nearby {{ state }} with pro-Bernie hashtags.</b></p>
+    <p><b>{{ state }} votes on {{ day_of_week }}!</b> Want to share voting information with potential {{ state }} voters? Here are {{ tweet_context |length }} tweets nearby with pro-Bernie hashtags.</p>
   </div>
 </div>
     
@@ -18,7 +18,7 @@
       {% endif %}
       <br>
       {{ tweet.0 |safe }}
-      <p>Make a new friend by sharing voting information:  <a class="twitter-share-button" href="{{ tweet.1 }}"></a></p>
+      <p>Make a new friend and sharing voting information:  <a class="twitter-share-button" href="{{ tweet.1 }}"></a></p>
     </div>
   </div>
 {% endfor %}
