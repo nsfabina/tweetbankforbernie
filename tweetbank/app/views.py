@@ -232,7 +232,6 @@ def _format_sanders_state_tweets(tweets):
     tweet_context = []
     unique_tweeters = []
     for tweet in reversed(tweets):
-        print tweet
         # Ignore retweets
         if tweet.get('retweeted_status', None) is not None:
             continue
